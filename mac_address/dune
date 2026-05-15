@@ -1,0 +1,7 @@
+(library
+ (name mac_address)
+ (public_name netlib.mac_address)
+ (libraries core)
+ (preprocess
+  (pps ppx_jane -compare-require-explicit-locality
+    -require-template-extension)))
