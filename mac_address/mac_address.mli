@@ -1,3 +1,5 @@
+@@ portable
+
 (** Functions for working with and formatting 48-bit MAC addresses. *)
 
 open Core
@@ -28,7 +30,7 @@ val to_int_exn : t -> int [@@zero_alloc]
 val of_int63_exn : Int63.t -> t
 val to_int63 : t -> Int63.t
 
-module String_style : sig
+module (String_style @@ nonportable) : sig @@ portable
   (** [Dash]-formatted strings look like "xx-xx-xx-xx-xx-xx", where the [x]'s are any hex
       digit. [Dot]-formatted strings look like "xxxx.xxxx.xxxx". [Colon]-formatted strings
       look like "xx:xx:xx:xx:xx:xx". [Compact] is "xxxxxxxxxxxx". *)
@@ -39,7 +41,7 @@ module String_style : sig
     | Compact
   [@@deriving compare ~localize, sexp, enumerate]
 
-  val arg : t Core.Command.Arg_type.t
+  val arg : t Core.Command.Arg_type.t @@ nonportable
 
   module Stable : sig
     module V1 : Stable_without_comparator

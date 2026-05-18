@@ -41,7 +41,7 @@ module Stable = struct
         [%expect {| 2b528f4b22f08e28876ffe0239315ac2 |}]
       ;;
 
-      module Deriving_hash : sig
+      module Deriving_hash : sig @@ portable
           type t [@@deriving hash]
         end
         with type t := t = struct
