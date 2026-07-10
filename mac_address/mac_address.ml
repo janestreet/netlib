@@ -233,6 +233,13 @@ module Stable = struct
           let of_string = of_string
         end)
 
+      let t_sexp_grammar =
+        t_sexp_grammar
+        |> Sexplib.Sexp_grammar.tag
+             ~key:Sexplib.Sexp_grammar.doc_comment_tag
+             ~value:[%message "A valid mac address."]
+      ;;
+
       include%template Comparator.V1.Make [@modality portable] (struct
           type nonrec t = t [@@deriving compare ~localize, sexp_of]
         end)

@@ -5,7 +5,7 @@
 open Core
 
 (** [private Int63.t] to enable immediate-type optimizations on 64-bit platforms. *)
-type t = private Int63.t [@@deriving compare ~localize, typerep]
+type t = private Int63.t [@@deriving compare ~localize, sexp_grammar, typerep]
 
 include%template Comparator.S [@modality portable] with type t := t
 
@@ -99,16 +99,21 @@ end
 (** [Unstable] provides (de)serializations that may change over time. In general, we
     suggest using [Stable], below, for (de)serializations. *)
 module Unstable : sig
-  include Identifiable.S with type t = t and type comparator_witness = comparator_witness
+  include
+    Identifiable.S_sexp_grammar
+    with type t = t
+     and type comparator_witness = comparator_witness
 
   include%template Sexplib0.Sexpable.Sexp_of [@alloc stack] with type t := t
 end
 
 module Stable : sig
   module V2 : sig
+    type nonrec t = t [@@deriving sexp_grammar]
+
     include
       Stable_comparable.With_stable_witness.V1
-      with type t = t
+      with type t := t
        and type comparator_witness = comparator_witness
 
     include Core.Core_stable.Hashable.V1.With_stable_witness.S with type key := t
